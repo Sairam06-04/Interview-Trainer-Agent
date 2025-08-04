@@ -85,10 +85,10 @@ else:
 ## Deployment Screenshots
 
 ### Agent Deployed on IBM Cloud
-![Agent Deployment Status](https://github.com/Sairam06-04/Interview-Trainer-Agent/blob/main/deployment_status.jpg)
+![Agent Deployment Status](./deployment_status.jpg)
 
 ### Agent Configuration & Custom Instructions
-![Agent Configuration](https://github.com/Sairam06-04/Interview-Trainer-Agent/blob/main/agent_configuration.jpg)
+![Agent Configuration](./agent_configuration.jpg)
 
 ### Agent in Action (Preview)
-![Agent Preview](https://github.com/Sairam06-04/Interview-Trainer-Agent/blob/main/agent_preview.jpg)
+![Agent Preview](./agent_preview.jpg)
