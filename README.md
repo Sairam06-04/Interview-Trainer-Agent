@@ -88,7 +88,7 @@ else:
 ![Agent Deployment Status](./deployment_status.jpg)
 
 ### Agent Configuration & Custom Instructions
-![Agent Configuration](https://github.com/Sairam06-04/Interview-Trainer-Agent/blob/main/agent_configuration.jpg?raw=true)
+![Agent Configuration](https://raw.githubusercontent.com/Sairam06-04/Interview-Trainer-Agent/refs/heads/main/agent_configuration.jpg)
 
 ### Agent in Action (Preview)
 ![Agent Preview](./agent_preview.jpg)
