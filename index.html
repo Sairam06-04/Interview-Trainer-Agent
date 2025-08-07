@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Trainer Agent</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 2rem; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-align: center; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: bold; color: #34495e; }
+        input[type="text"] { width: 100%; padding: 0.8rem; border: 1px solid #bdc3c7; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 1rem; background-color: #3498db; color: white; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; transition: background-color 0.3s; }
+        button:hover { background-color: #2980b9; }
+        button:disabled { background-color: #95a5a6; cursor: not-allowed; }
+        #result-container { margin-top: 2rem; padding: 1.5rem; border: 1px solid #e0e0e0; border-radius: 4px; background-color: #ecf0f1; white-space: pre-wrap; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Interview Trainer Agent 🤖</h1>
+    <p style="text-align:center;">Enter a job role and experience level to get your custom prep plan!</p>
+    <div class="form-group">
+        <label for="user-input">Your Request</label>
+        <input type="text" id="user-input" value="Prepare me for a Full Stack Developer role">
+    </div>
+    <button id="generate-btn">Generate Prep Plan</button>
+    <div id="result-container" style="display:none;"></div>
+</div>
+
+<script>
+    const generateBtn = document.getElementById('generate-btn');
+    const resultContainer = document.getElementById('result-container');
+    const userInput = document.getElementById('user-input');
+
+    // IMPORTANT: REPLACE THESE WITH YOUR ACTUAL CREDENTIALS
+    const API_KEY = "55hU52pNPYBFXz8rNHLhfBuXvElaTz5VMg1bXSsNGc-v";
+    const AGENT_ENDPOINT_URL = "https://us-south.ml.cloud.ibm.com/ml/v4/deployments/68413dfd-7bf8-42d6-8730-11f91e560ac6/ai_service_stream?version=2021-05-01";
+
+    async function getIAMToken(apiKey) {
+        const response = await fetch("https://iam.cloud.ibm.com/identity/token", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Accept": "application/json"
+            },
+            body: `grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=${apiKey}`
+        });
+        const data = await response.json();
+        return data.access_token;
+    }
+
+    generateBtn.addEventListener('click', async () => {
+        const inputText = userInput.value;
+
+        generateBtn.disabled = true;
+        generateBtn.textContent = 'Generating...';
+        resultContainer.style.display = 'block';
+        resultContainer.textContent = 'Authenticating with IBM Cloud and contacting the agent...';
+
+        try {
+            // Step 1: Get the access token
+            const iamToken = await getIAMToken(API_KEY);
+            if (!iamToken) {
+                throw new Error("Failed to get authentication token.");
+            }
+            
+            resultContainer.textContent = 'Authentication successful. Generating response...';
+
+            // Step 2: Call the agent with the token
+            const agentResponse = await fetch(AGENT_ENDPOINT_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${iamToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ "input": inputText })
+            });
+
+            if (!agentResponse.ok) {
+                throw new Error(`Agent API error! Status: ${agentResponse.status}`);
+            }
+
+            const agentData = await agentResponse.json();
+            // The structure might vary, adjust if needed based on API response
+            const agentOutput = agentData.results[0].output.generic[0].text;
+            resultContainer.textContent = agentOutput;
+
+        } catch (error) {
+            resultContainer.textContent = `An error occurred: ${error.message}`;
+            console.error('Error:', error);
+        } finally {
+            generateBtn.disabled = false;
+            generateBtn.textContent = 'Generate Prep Plan';
+        }
+    });
+</script>
+
+</body>
+</html>
