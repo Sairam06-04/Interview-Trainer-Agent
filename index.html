@@ -37,7 +37,7 @@
 
     // IMPORTANT: REPLACE THESE WITH YOUR ACTUAL CREDENTIALS
     const API_KEY = "55hU52pNPYBFXz8rNHLhfBuXvElaTz5VMg1bXSsNGc-v";
-    const AGENT_ENDPOINT_URL = "https://us-south.ml.cloud.ibm.com/ml/v4/deployments/68413dfd-7bf8-42d6-8730-11f91e560ac6/ai_service_stream?version=2021-05-01";
+    const AGENT_ENDPOINT_URL = "https://cors-anywhere.herokuapp.com/https://us-south.ml.cloud.ibm.com/ml/v4/deployments/68413dfd-7bf8-42d6-8730-11f91e560ac6/ai_service_stream?version=2021-05-01";
 
     async function getIAMToken(apiKey) {
         const response = await fetch("https://iam.cloud.ibm.com/identity/token", {
